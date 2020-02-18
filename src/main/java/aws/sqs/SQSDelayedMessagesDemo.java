@@ -1,4 +1,4 @@
-package com.demo.sqs;
+package aws.sqs;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class SQSDelayedMessagesDemo {
 
 	public static void main(String[] args) {
 
-		String queueName = "srl-first-queue";
+		String queueName = "first-queue";
 
 		if(!createQueue(queueName)) {
 			System.out.println("Something went wrong while creating queue");

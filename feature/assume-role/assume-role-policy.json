@@ -1,0 +1,21 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1583238460392",
+      "Action": [
+        "sts:AssumeRole"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:iam::109688537152:user/Guest"
+    },
+    {
+      "Sid": "Stmt1583238480053",
+      "Action": [
+        "iam:ListRoles"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:iam::109688537152:user/Guest"
+    }
+  ]
+}

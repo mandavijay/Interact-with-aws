@@ -1,0 +1,72 @@
+Resource Creation:
+
+aws s3 rb s3://assume-demo-bucket --force
+aws s3 mb s3://role-assume-demo/
+aws s3 cp ../images/beach.jpg s3://role-assume-demo/demo-images/beach.jpg
+aws s3 cp ../images/coffee.jpg s3://role-assume-demo/demo-images/coffee.jpg
+
+
+1.  Create User
+aws iam create-user --user-name Guest
+aws iam create-access-key --user-name Guest
+aws configure --profile Guest
+
+2.  Create Policy with ListRoles and AssumeRole Permissions
+assume-role-policy.json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListRoles",
+                "sts:AssumeRole"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+aws iam create-policy --policy-name assume-role-policy --policy-document assume-role-policy.json
+
+3.  Create a Role with Resource Access Permissions and Trust Relationship
+assume-role-trust-policy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::109688537152:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+aws iam create-role --role-name s3-readonly-access-role --assume-role-policy-document assume-role-trust-policy.json
+aws iam attach-role-policy --role-name example-role --policy-arn "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+aws iam list-attached-role-policies --role-name example-role
+
+4.  List Roles -- Use Prefix for Specific Search
+aws iam list-roles --query "Roles[?RoleName == 'S3-ReadOnly-Role']"
+
+5.  Assume Role to receive temporary credentials
+aws sts assume-role --role-arn "arn:aws:iam::109688537152:role/S3-ReadOnly-Role" --role-session-name AWSCLI-Session --profile Guest
+
+6.  Set temporary credentials to environment variables.
+export AWS_ACCESS_KEY_ID=ExampleAccessKeyID1
+export AWS_SECRET_ACCESS_KEY=ExampleSecretKey1
+export AWS_SESSION_TOKEN=ExampleSessionToken1
+
+
+7.  Display identity
+aws sts get-caller-identity
+
+8.  Access the resource
+aws s3 ls
+
+9.  clean up
+- unset credentials
+unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+
+10. display identity
+aws sts get-caller-identity

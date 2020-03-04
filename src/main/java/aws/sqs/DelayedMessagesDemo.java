@@ -11,7 +11,7 @@ import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 
-public class SQSDelayedMessagesDemo {
+public class DelayedMessagesDemo {
 
 	private static AmazonSQS sqs = AmazonSQSClientBuilder.defaultClient();
 
@@ -19,10 +19,10 @@ public class SQSDelayedMessagesDemo {
 
 		String queueName = "first-queue";
 
-		if(!createQueue(queueName)) {
-			System.out.println("Something went wrong while creating queue");
-			return;
-		}
+		/*
+		 * if(!createQueue(queueName)) {
+		 * System.out.println("Something went wrong while creating queue"); return; }
+		 */
 
 		// Getting URL of Queue
 		String queueUrl = sqs.getQueueUrl(queueName).getQueueUrl();
@@ -32,6 +32,7 @@ public class SQSDelayedMessagesDemo {
 		System.out.println("Sending Messages");
 		sendMessages(queueUrl, 5);
 
+		/*
 		// Consumer reads immediately
 		System.out.println("Reading Messages");
 		readMessages(queueUrl, 10);
@@ -44,6 +45,7 @@ public class SQSDelayedMessagesDemo {
 		
 		System.out.println("Deleting Queue");
 		sqs.deleteQueue(queueUrl);
+		*/
 
 	}
 
